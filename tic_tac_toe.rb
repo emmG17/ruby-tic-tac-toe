@@ -28,14 +28,14 @@ ___ ___ ___
   end
 
   def full?
-    @slots.values.length == 9
+    @slots.values.none?(nil)
   end
 end
 
 class Player
   attr_reader :mark, :name
 
-  def initialize(name, mark)
+  def initialize(mark, name)
     @mark = mark
     @name = name
   end
@@ -44,7 +44,7 @@ end
 class Game
   def initialize
     @board = Board.new
-    @players = [Player.new('X', 'Player 1'), Player.new('Y', 'Player 2')]
+    @players = [Player.new('X', 'Player 1'), Player.new('O', 'Player 2')]
     @current_player = @players[0]
     @next_player = @players[1]
   end
@@ -52,24 +52,25 @@ class Game
   private
 
   def turn
+    selected_slot = player_input
+    @board.write_slot(selected_slot, @current_player.mark)
     @board.print_board
-    selected_slot = get_player_input
-    @board.write_slot(selected_slot, @player.mark)
     swap_players
   end
 
   def player_input
-    puts 'Select a slot'
-    gets(1).to_i
+    puts "#{@current_player.name}, select a free slot"
+    gets.to_i
   end
 
   def swap_players
-    temp = @current_player
-    @current_player = @next_player
-    @next_player = temp
+    @current_player, @next_player = @next_player, @current_player
   end
 
+  public
+
   def play
+    @board.print_board
     turn until @board.full?
   end
 end
