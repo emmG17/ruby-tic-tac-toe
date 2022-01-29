@@ -21,4 +21,17 @@ ___ ___ ___
 ___ ___ ___
  #{@slots[7] || 7} | #{@slots[8] || 8} | #{@slots[9] || 9}"
   end
+
+  def write_slot(place, symbol)
+    @slots[place] = symbol unless @slots[place]
+  end
+end
+
+class Player
+  attr_reader :symbol, :name
+
+  def initialize(symbol, name)
+    @symbol = symbol
+    @name = name
+  end
 end
